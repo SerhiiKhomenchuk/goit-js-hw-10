@@ -38,7 +38,7 @@ function onSerch(evt) {
             countrieList.innerHTML = murkupList;
             countryInfo.innerHTML = murkupInfo;
         })
-        .catch(err => console.log("tra la la"))
+        .catch(err => Notiflix.Notify.failure("Oops, there is no country with that name"))
 }
 
 

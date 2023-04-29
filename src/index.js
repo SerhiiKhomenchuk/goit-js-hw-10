@@ -37,9 +37,7 @@ function onSerch(evt) {
                 countryInfo.innerHTML = createMarkupList(data);
                 countrieList.innerHTML = "";                  
                 }
-                
-        }
-        )
+    })
             
         .catch(err => {
             Notiflix.Notify.failure("Oops, there is no country with that name");

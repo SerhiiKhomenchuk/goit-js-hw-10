@@ -14,33 +14,55 @@ form.addEventListener("input", debounce(onSerch, DEBOUNCE_DELAY));
 
 function onSerch(evt) {
     
-    const inputsCountryName = evt.target.value
+    const inputsCountryName = evt.target.value.trim();
+    if (!inputsCountryName) {
+        countryInfo.innerHTML = "";
+        countrieList.innerHTML = "";
+        return
+    }
     fetchCountries(inputsCountryName)
         .then(data => {
-            let murkupList = "";
-            let murkupInfo = "";
-            data.map((countrie) => {
-                if (data.length===1) {
-                    murkupInfo = `<div><div style="display: flex; align-items: center;"><img style = "width:50px"src="${countrie.flags.svg}"><b style="font-size:40px">${countrie.name.official}</b></div><p style="font-size:18px"><b>Capital: </b><span>${countrie.capital}</span></p>
-                    <p style="font-size:18px"><b>Population: </b><span>${countrie.population}</span></p>
-                    <p style="font-size:18px"><b>Languages: </b><span>${Object.values(countrie.languages).join(", ")}</span></p></div>`
-                    
-                } else if (data.length >= 2 && data.length <= 10) {
-                    murkupList += `<li style="list-style-type: none; display: flex; font-size: 22px; align-items: center; margin: 10px" value="${countrie.cca3}"><img style = "width:50px; margin-right: 5px" src="${countrie.flags.svg}"><span>${countrie.name.official}</span></li>`
-                    
-                } else {
-                    
+            
+            if (data.length > 10) {
                     Notiflix.Notify.info("Too many matches found. Please enter a more specific name.");
+                countryInfo.innerHTML = "";
+                countrieList.innerHTML = "";
                     
+                } else if (data.length <= 10 && data.length >= 2) {
+                countrieList.innerHTML = createMarkupInfo(data);
+                countryInfo.innerHTML = "";
+                    
+                    
+            } else if (data.length === 1) {
+                countryInfo.innerHTML = createMarkupList(data);
+                countrieList.innerHTML = "";                  
                 }
                 
-            })
-            countrieList.innerHTML = murkupList;
-            countryInfo.innerHTML = murkupInfo;
+        }
+        )
+            
+        .catch(err => {
+            Notiflix.Notify.failure("Oops, there is no country with that name");
+            countryInfo.innerHTML = "";
+            countrieList.innerHTML = "";
+            
         })
-        .catch(err => Notiflix.Notify.failure("Oops, there is no country with that name"))
 }
 
+function createMarkupList(arr) {
+    return arr.map((countrie) => `<div>
+    <div style="display: flex; align-items: center;">
+    <img style = "width:50px"src="${countrie.flags.svg}"><b style="font-size:40px">${countrie.name.official}</b>
+    </div>
+    <p style="font-size:18px"><b>Capital: </b><span>${countrie.capital}</span></p>
+    <p style="font-size:18px"><b>Population: </b><span>${countrie.population}</span></p>
+    <p style="font-size:18px"><b>Languages: </b><span>${Object.values(countrie.languages)}</span></p>
+    </div>`).join("")
+}
 
+function createMarkupInfo(arr) {
+    return arr.map((countrie) => `<li style="list-style-type: none; display: flex; font-size: 22px; align-items: center; margin: 10px" value="${countrie.cca3}">
+    <img style = "width:50px; margin-right: 5px" src="${countrie.flags.svg}"><span>${countrie.name.official}</span></li>`).join("")
+}
 
 

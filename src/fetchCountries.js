@@ -6,7 +6,7 @@ export default function fetchCountries(countryName) {
     const URL = `${BASE_URL}${countryName}`
     return fetch(URL).then((resp) => { 
         
-        if (!resp.ok) {
+        if (!resp.ok || resp.statusCode === 404) {
            throw new Error(resp.statusText)
         }
         

@@ -8,7 +8,7 @@ const DEBOUNCE_DELAY = 300;
 const form = document.querySelector("#search-box")
 const countrieList = document.querySelector(".country-list");
 const countryInfo = document.querySelector(".country-info")
-console.log(form);
+
 
 form.addEventListener("input", debounce(onSerch, DEBOUNCE_DELAY));
 

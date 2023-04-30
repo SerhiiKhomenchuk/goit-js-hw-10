@@ -8,9 +8,11 @@ const DEBOUNCE_DELAY = 300;
 const form = document.querySelector("#search-box")
 const countrieList = document.querySelector(".country-list");
 const countryInfo = document.querySelector(".country-info")
-
+console.log(form);
 
 form.addEventListener("input", debounce(onSerch, DEBOUNCE_DELAY));
+
+
 
 function onSerch(evt) {
     
@@ -20,11 +22,11 @@ function onSerch(evt) {
         countrieList.innerHTML = "";
         return
     }
+
     fetchCountries(inputsCountryName)
-        .then(data => {
-            
+        .then((data) => {
             if (data.length > 10) {
-                    Notiflix.Notify.info("Too many matches found. Please enter a more specific name.");
+                Notiflix.Notify.info("Too many matches found. Please enter a more specific name.");
                 countryInfo.innerHTML = "";
                 countrieList.innerHTML = "";
                     
@@ -48,19 +50,19 @@ function onSerch(evt) {
 }
 
 function createMarkupList(arr) {
-    return arr.map((countrie) => `<div>
+    return arr.map(({name,capital,population,flags,languages}) => `<div>
     <div style="display: flex; align-items: center;">
-    <img style = "width:50px"src="${countrie.flags.svg}"><b style="font-size:40px">${countrie.name.official}</b>
+    <img style = "width:50px"src="${flags.svg}"><b style="font-size:40px">${name.official}</b>
     </div>
-    <p style="font-size:18px"><b>Capital: </b><span>${countrie.capital}</span></p>
-    <p style="font-size:18px"><b>Population: </b><span>${countrie.population}</span></p>
-    <p style="font-size:18px"><b>Languages: </b><span>${Object.values(countrie.languages)}</span></p>
+    <p style="font-size:18px"><b>Capital: </b><span>${capital}</span></p>
+    <p style="font-size:18px"><b>Population: </b><span>${population}</span></p>
+    <p style="font-size:18px"><b>Languages: </b><span>${Object.values(languages)}</span></p>
     </div>`).join("")
 }
 
 function createMarkupInfo(arr) {
-    return arr.map((countrie) => `<li style="list-style-type: none; display: flex; font-size: 22px; align-items: center; margin: 10px" value="${countrie.cca3}">
-    <img style = "width:50px; margin-right: 5px" src="${countrie.flags.svg}"><span>${countrie.name.official}</span></li>`).join("")
+    return arr.map(({name,flags,cca3}) => `<li style="list-style-type: none; display: flex; font-size: 22px; align-items: center; margin: 10px" value="${cca3}">
+    <img style = "width:50px; margin-right: 5px" src="${flags.svg}"><span>${name.official}</span></li>`).join("")
 }
 
 
